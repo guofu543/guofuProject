@@ -16,6 +16,11 @@ gulp.task("copy-img",async ()=>{
 })
 
 gulp.task("watch-all",async ()=>{
+    gulp.watch("./src/images/**/*",async()=>{
+        gulp.src("./src/images/**/*")
+        .pipe(gulp.dest("d:\\phpstudy_pro\\WWW\\myProject\\images"))
+    })
+
     gulp.watch("./src/*.html",async()=>{
         gulp.src("./src/*.html")
         .pipe(htmlmin())

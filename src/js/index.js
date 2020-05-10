@@ -71,18 +71,8 @@ $(function () {
     let checkBtnr = true;
     let checkBtnl = false;
     let $leftBanner = 0;
-
-    function autoLunbo(){
-        setInterval(() => {
-            goLunbo()
-        }, 1000);
-    }
-    autoLunbo();
-    $("#shangou_r").click(function(event){
-        goLunbo(event)
-    })
-        function goLunbo(event) {
-        event.preventDefault();
+    $("#shangou_r").click(function (event) {
+        event && event.preventDefault();
         if (checkBtnr == false) {
             return;
         }
@@ -112,10 +102,10 @@ $(function () {
                 checkBtnr = false;
             }
         })
-    }
+    });
 
     $("#shangou_l").click(function (event) {
-        event.preventDefault();
+        event && event.preventDefault();
         if (checkBtnl == false) {
             return;
         }
@@ -167,17 +157,17 @@ $(function () {
             tEndH = 8 - nowH;
             tEndM = 59 - nowM;
             tEndS = 59 - nowS;
-        }else if(nowH < 14){
+        } else if (nowH < 14) {
             $(".time_box p span").html("14");
             tEndH = 13 - nowH;
             tEndM = 59 - nowM;
             tEndS = 59 - nowS;
-        }else if(nowH < 20){
+        } else if (nowH < 20) {
             $(".time_box p span").html("20");
             tEndH = 19 - nowH;
             tEndM = 59 - nowM;
             tEndS = 59 - nowS;
-        }else{
+        } else {
             $(".time_box p span").html("00");
             tEndH = 23 - nowH;
             tEndM = 59 - nowM;
@@ -203,4 +193,15 @@ $(function () {
         };
         return t;
     }
+
+    $(".showHot span").mouseover(function(){
+        $(".showHot span").css({
+            "color":"#000",
+            "border-bottom":"none"
+        })
+        $(this).css({
+            "color":"#ff7900",
+            "border-bottom":"2px solid #ff7900"
+        })
+    })
 })

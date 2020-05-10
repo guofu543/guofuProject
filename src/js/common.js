@@ -90,8 +90,8 @@ $(function () {
     $(".children_list").find("li").click(function () {
         location.href = "goods.html"
     })
-    $("#goods_aside").find("a").click(function () {
-        location.href = "goodsList.html"
+    $("#51ative").click(function () {
+        location.href = "SpecialTopic-51.html"
     })
 })
 

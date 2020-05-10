@@ -93,32 +93,29 @@ $(function () {
         $(".goods_banner").mousemove(function (event) {
             let left1 = event.pageX - bannerBoxLeft - mirrorWidth / 2;
             let top1 = event.pageY - bannerBoxTop - mirrorHeight / 2;
-
+            
             //考虑到轮播按钮，width=34px
             if (left1 < 34) {
                 left1 = 34;
             } else if (left1 > bannerBoxWidth - mirrorWidth - 34) {
                 left1 = bannerBoxWidth - mirrorWidth - 34
             }
-
+            
             //考虑到豆豆按钮，height=2px
             if (top1 < 2) {
                 top1 = 2;
             } else if (top1 > bannerBoxHeight - mirrorHeight - 2) {
                 top1 = bannerBoxHeight - mirrorHeight - 2
             }
-
+            
             $("#mirrorBox").css({
                 "left": left1,
                 "top": top1
             })
             $("#showBox").css({
-                "position": "absolute",
-                "left": "550px",
-                "top": "30px",
                 "width": mirrorWidth * 4,
                 "height": mirrorHeight * 4,
-                "background-image": "url(../"+imgSrc+")",
+                "background-image": `url(${imgSrc})`,
                 "background-size": `${bannerBoxWidth * 4}px ${bannerBoxHeight * 4}px`,
                 "background-position": `${-left1 * 4}px ${-top1 * 4}px`
             })
@@ -159,12 +156,18 @@ $(function () {
     function serviceChoose($dom) {
         $dom.click(function () {
             $dom.css("border-color", "#e0e0e0");
-            $dom.find("em").css("background", "#fff");
-            $dom.find("em").css("border-color", "#bbbbbb");
+            $dom.find("em img").css("display","none")
+            $dom.find("em").css({
+                "border-color":"#bbbbbb",
+                "background":"#fff"
+            });
             $dom.find("div").find("span").css("color", "#000")
             $(this).css("border-color", "#ff6700");
-            $(this).find("em").css("background", "#ff6700");
-            $(this).find("em").css("border-color", "#ff6700");
+            $(this).find("em img").css("display","block");
+            $(this).find("em").css({
+                "border-color":"#ff6700",
+                "background":"#ff6700"
+            });
             $(this).find("div").find("span").css("color", "#ff6700")
         })
     }
