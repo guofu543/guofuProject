@@ -23,12 +23,6 @@ gulp.task("watch-all",async ()=>{
 
     gulp.watch("./src/*.html",async()=>{
         gulp.src("./src/*.html")
-        .pipe(htmlmin())
-        .pipe(gulp.dest("d:\\phpstudy_pro\\WWW\\myProject"))
-    })
-
-    gulp.watch("./src/*.php",async()=>{
-        gulp.src("./src/*.php")
         .pipe(htmlmin({
             collapseWhitespace: true,
             removeComments: true,  
@@ -39,6 +33,11 @@ gulp.task("watch-all",async ()=>{
             minifyJS: true,
             minifyCSS: true
         }))
+        .pipe(gulp.dest("d:\\phpstudy_pro\\WWW\\myProject"))
+    })
+
+    gulp.watch("./src/*.php",async()=>{
+        gulp.src("./src/*.php")
         .pipe(gulp.dest("d:\\phpstudy_pro\\WWW\\myProject"))
     })
 
