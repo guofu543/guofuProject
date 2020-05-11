@@ -1,24 +1,43 @@
 $(function () {
-    let $goodsLi = $(".good_List").find("li");
-    let $categoryName = $(".category_name")
-    $goodsLi.parent().each(function () {
-        let $goodsLenth = $(this).find("li").length;
-        $(this).find("li").each(function () {
-            if (($(this).index() + 1) % 5 == 0) {
-                $(this).css("border-right", "none")
-            }
-            if ($goodsLenth - $(this).index() <= ($goodsLenth % 5)) {
-                $(this).css("border-bottom", "none")
-            }
+    $.get("getGoodsList.php?typeId=001", function (data) {
+        showData(data);
+    }, "json")
 
-            $(this).click(function(){
-                location.href = "goods.html"
+    function showData(data) {
+        let htmlStr = "";
+        for(let i = 0 ; i < 7;i++){
+            data.forEach(item =>{
+                htmlStr += `
+                <li>
+                    <a href="goods.html?goodsId=${item.goodsId}">
+                        <img src="${item.goodsImg}" alt="">
+                    </a>
+                    <a href="goods.html?goodsId=${item.goodsId}">${item.goodsName}</a>
+                </li>
+                `
+            })
+        }
+        $(".good_List").eq(0).html(htmlStr);
+        checkBorder();
+    }
+
+    function checkBorder(){
+        let $goodsLi = $(".good_List").find("li");
+        $goodsLi.parent().each(function () {
+            let $goodsLenth = $(this).find("li").length;
+            $(this).find("li").each(function () {
+                if (($(this).index() + 1) % 5 == 0) {
+                    $(this).css("border-right", "none")
+                }
+                if ($goodsLenth - $(this).index() <= ($goodsLenth % 5)) {
+                    $(this).css("border-bottom", "none")
+                }
             })
         })
-    })
+    }
 
 
-
+    let $categoryName = $(".category_name")
     $categoryName.click(function () {
         $(this).next().slideToggle(500, function () {
             if ($(this).css("display") == "none") {

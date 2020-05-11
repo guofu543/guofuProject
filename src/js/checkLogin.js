@@ -1,49 +1,41 @@
-window.onload = function(){
-    $("#btnLogin").onclick = function () {
+$(function () {
+    $("#btnLogin").click(function () {
+        console.log("点击成功")
         checkLogin();
-    }
-    $("#username").oninput = function () {
-        $("#btnLogin").previousElementSibling.innerHTML = ""
-        $("#username").style.borderColor = "#e0e0e0"
-    }
-    $("#userpass").oninput = function () {
-        $("#btnLogin").previousElementSibling.innerHTML = ""
-        $("#username").style.borderColor = "#e0e0e0"
-    }
-}
-async function checkLogin() {
-    try {
-        let res = await ajax({
-            method: "post",
-            url: "checkLogin.php",
-            params: `username=${$("#username").value}&userpass=${$("#userpass").value}`
-        });
+    })
+    $("#username").keyup(function () {
+        $("#btnLogin").prev().html("");
+        $("#username").css("border-color", "#e0e0e0")
+    })
+    $("#userpass").keyup(function () {
+        $("#btnLogin").prev().html("");
+        $("#username").css("border-color", "#e0e0e0")
+    })
+})
 
-        if (res == "1") {
-            addCookie("username",$("#username").value,7);
-            location.href = "index.html";
-            // $("#btnLogin").previousElementSibling.innerHTML = "登录成功咯";
-        } else if (res == "0") {
-            $("#btnLogin").previousElementSibling.innerHTML = "！用户名或密码不正确";
-            $("#btnLogin").previousElementSibling.style.color = "#ff6700";
-            $("#btnLogin").previousElementSibling.style.fontSize = "12px";
-            $("#username").style.borderColor = "#ff6700";
-        };
-    } catch (err) {
-        if (err == 404) {
-            console.log("您请求的页面不存在")
-        } else if (err == 500) {
-            console.log("服务器出错")
+function checkLogin() {
+    $.post(
+        "login.php",
+        {
+            "username": $("#username").val(),
+            "userpass": $("#userpass").val()
+        },
+        function (data) {
+            if (data == "success") {
+                addCookie("username", $("#username").val(), 7);
+                setTimeout(() => {
+                    location.href = "index.html";
+                }, 2000);
+            } else if (data == "fail") {
+                $("#btnLogin").prev().html("！用户名或密码不正确");
+                $("#btnLogin").prev().css("color","#ff6700");
+                $("#btnLogin").prev().css("font-size","12px");
+                $("#username").css("border-color","#ff6700");
+            }else{
+                $("#btnLogin").prev().html("！服务器出错");
+                $("#btnLogin").prev().css("color","#ff6700");
+                $("#btnLogin").prev().css("font-size","12px");
+            }
         }
-    }
-}
-
-function $(str) {
-    if (str.charAt(0) == "#") {
-        return document.getElementById(str.substring(1));
-    } else if (str.charAt(0) == ".") {
-        return document.getElementsByClassName(str.substring(1));
-    } else {
-        return document.getElementsByTagName(str);
-    }
+    )
 }

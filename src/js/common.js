@@ -28,10 +28,6 @@ $(function () {
             }, 1000)
         }
     )
-
-    $(".logo_nav li").click(function(){
-        location.href = "goods.html"
-    })
 })
 
 function getUserName() {
@@ -87,9 +83,6 @@ $(function () {
         location.reload();
     })
 
-    $(".children_list").find("li").click(function () {
-        location.href = "goods.html"
-    })
     $("#51ative").click(function () {
         location.href = "SpecialTopic-51.html"
     })

@@ -1,7 +1,4 @@
 $(function () {
-    $(".shopping_minBox").click(function () {
-        location.href = "goods.html";
-    })
 
     // banner
     let ord = 0;
@@ -194,14 +191,45 @@ $(function () {
         return t;
     }
 
-    $(".showHot span").mouseover(function(){
+    $(".showHot span").mouseover(function () {
         $(".showHot span").css({
-            "color":"#000",
-            "border-bottom":"none"
+            "color": "#000",
+            "border-bottom": "none"
         })
         $(this).css({
-            "color":"#ff7900",
-            "border-bottom":"2px solid #ff7900"
+            "color": "#ff7900",
+            "border-bottom": "2px solid #ff7900"
         })
     })
+})
+
+//获取商品
+$(function () {
+    $.get("getGoodsList.php?typeId=001", function (data) {
+        showData(data);
+    }, "json");
+
+    function showData(data) {
+        console.log(data)
+        let htmlStr = "";
+        for(let i = 0; i < 2 ; i++){
+            data.forEach(item =>{
+                htmlStr += `
+                <li>
+                    <a href="goods.html?goodsId=${item.goodsId}">
+                        <h2>
+                            <img src="${item.goodsImg}" alt="">
+                        </h2>
+                        <h4>${item.goodsName}</h4>
+                        <p>${item.goodsDesc}</p>
+                        <span>${item.goodsPrice}元</span>
+                    </a>
+                </li>
+                `
+            })
+        }
+        $(".shopping_minBox").eq(0).html(htmlStr);
+        $(".shopping_minBox li a").eq(3).css("margin","0");
+        $(".shopping_minBox li a").eq(7).css("margin","0");
+    }
 })
