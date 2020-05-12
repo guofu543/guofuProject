@@ -56,16 +56,20 @@
     box-shadow: 3px 4px 8px 1px #919090;
     padding-left: 25px;
     display: none;
+    overflow: hidden;
     .children_list {
         float: left;
-        width: 187px;
+        width: 248px;
+        height: 460px;
         margin-right: 57px;
     }
     li {
+        width: 248px;
+        height: 81px;
         h3 {
-            width: 28px;
-            height: 36px;
-            padding-top: 20px;
+            width: 36px;
+            height: 40px;
+            padding-top: 8px;
             float: left;
             margin-right: 19px;
         }
@@ -75,12 +79,12 @@
         }
         a {
             font-size: 12px;
-            line-height: 76px;
+            line-height: 51px;
             color: #363636;
             float: left;
         }
         &:hover {
-            a{
+            a {
                 color: rgb(255, 103, 0);
             }
         }

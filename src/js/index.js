@@ -209,8 +209,23 @@ $(function () {
         showData(data);
     }, "json");
 
+    $.get("getGoodsList.php?typeId=002",function(data){
+        showData(data);
+    },"json")
+
+    $.get("getGoodsList.php?typeId=004",function(data){
+        showData(data);
+    },"json")
+
     function showData(data) {
-        console.log(data)
+        // console.log(data)
+        let id = data[0].goodsId.charAt(2) - 1;
+        let ord;
+        if(id == "0"){
+            ord = 0;
+        }else if(id == "1" || id == "3"){
+            ord = 1;
+        }
         let htmlStr = "";
         for(let i = 0; i < 2 ; i++){
             data.forEach(item =>{
@@ -228,8 +243,9 @@ $(function () {
                 `
             })
         }
-        $(".shopping_minBox").eq(0).html(htmlStr);
-        $(".shopping_minBox li a").eq(3).css("margin","0");
-        $(".shopping_minBox li a").eq(7).css("margin","0");
+        $(".shopping_minBox").eq(ord).append(htmlStr);
+        $(".shopping_minBox").eq(ord).find("a").eq(3).css("margin","0");
+        $(".shopping_minBox").eq(ord).find("a").eq(7).css("margin","0");
     }
+
 })

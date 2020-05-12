@@ -3,29 +3,81 @@ $(function () {
     let str = location.search;
     let arr = str.split("=");
     let goodsId = arr[1];
-    $.get("getGoodsInfo.php", "goodsId=" + goodsId, function (data) {
-        showData(data);
-    }, "json");
+    let ord = goodsId.charAt(2);
+    if (ord == "1") {
+        $.get("getGoodsInfo.php", "goodsId=" + goodsId, function (data) {
+            showPhone(data);
+        }, "json");
+        function showPhone(data) {
+            console.log(data);
+            $(".goodsName-wrap h2").html(data.goodsName);
+            $(".goodsName-wrap > a").html(data.goodsName + "变焦版");
+            let htmlImg = `
+                <img src="${data.beiyong1}" alt="">
+                <img src="${data.beiyong2}" alt="">
+                <img src="${data.beiyong3}" alt="">
+                <img src="${data.beiyong4}" alt="">
+                <img src="${data.beiyong5}" alt="">
+            `;
+            $(".goods_banner").prepend(htmlImg);
+            banner();
 
-    function showData(data) {
-        console.log(data);
-        $(".goodsName-wrap h2").html(data.goodsName);
-        $(".goodsName-wrap > a").html(data.goodsName + "变焦版");
-        let htmlImg = `
+            let htmlTitle = `
+                <h3>${data.goodsName}</h3>
+                <p>
+                    <span>${data.beiyong6}</span>
+                    <em>${data.beiyong7}</em>
+                </p>
+                <p>小米自营</p>
+                <p>${data.goodsPrice}元</p>
+                <p>
+                    <span>赠完即止</span>
+                    <em>赠Redmi AirDots 真无线蓝牙耳机 黑色</em>
+                </p>
+            `;
+            $(".goods_title").append(htmlTitle);
+
+            let totalp = parseInt(data.goodsPrice);
+            let totalAll = parseInt(totalp + 79);
+            let htmlTotal = `
+                <ul>
+                    <li class="clear_fix">
+                        <span class="float_left">${data.goodsName} 8GB+128GB 太空灰</span>
+                        <em class="float_right">${data.goodsPrice} 元</em>
+                    </li>
+                    <li class="clear_fix">
+                        <span class="float_left">碎屏保障服务</span>
+                        <em class="float_right">79 元<del>159元</del></em>
+                    </li>
+                    <li>总计：${totalAll}元</li>
+                </ul>
+            `;
+            $(".goods_total").append(htmlTotal);
+        }
+    } else {
+        $.get("getGoodsInfo.php", "goodsId=" + goodsId, function (data) {
+            showData(data);
+        }, "json")
+        function showData(data) {
+            console.log(data);
+            $(".goodsName-wrap h2").html(data.goodsName);
+            $(".goodsName-wrap > a").html("");
+            let htmlImg = `
             <img src="${data.beiyong1}" alt="">
-            <img src="${data.beiyong2}" alt="">
-            <img src="${data.beiyong3}" alt="">
-            <img src="${data.beiyong4}" alt="">
-            <img src="${data.beiyong5}" alt="">
-        `;
-        $(".goods_banner").prepend(htmlImg);
-        banner();
+                <div id="mirrorBox">
 
-        let htmlTitle = `
+                </div>
+                <div id="showBox">
+
+                </div>
+        `;
+            $(".goods_banner").html(htmlImg);
+            fdj(data.beiyong1)
+
+            let htmlTitle = `
             <h3>${data.goodsName}</h3>
             <p>
-                <span>${data.beiyong6}</span>
-                <em>${data.beiyong7}</em>
+                <em>${data.goodsDesc}</em>
             </p>
             <p>小米自营</p>
             <p>${data.goodsPrice}元</p>
@@ -34,24 +86,55 @@ $(function () {
                 <em>赠Redmi AirDots 真无线蓝牙耳机 黑色</em>
             </p>
         `;
-        $(".goods_title").append(htmlTitle);
+            $(".goods_title").append(htmlTitle);
 
-        let totalp = parseInt(data.goodsPrice);
-        let totalAll = parseInt(totalp + 79);
-        let htmlTotal = `
+            let htmlTotal = `
             <ul>
                 <li class="clear_fix">
                     <span class="float_left">${data.goodsName} 8GB+128GB 太空灰</span>
                     <em class="float_right">${data.goodsPrice} 元</em>
                 </li>
                 <li class="clear_fix">
-                    <span class="float_left">碎屏保障服务</span>
-                    <em class="float_right">79 元<del>159元</del></em>
                 </li>
-                <li>总计：${totalAll}元</li>
+                <li>总计：${data.goodsPrice}元</li>
             </ul>
         `;
-        $(".goods_total").append(htmlTotal);
+            $(".goods_total").append(htmlTotal);
+            $(".goods_edition").eq(0).html("")
+            $(".goods_edition").eq(1).css("margin-bottom","0")
+            $(".goods_service").html("")
+        }
+    }
+
+})
+
+$(function(){
+    let vipName = getCookie("username");
+
+    $("#addCart").click(function(e){
+        addCart();
+        e.preventDefault();
+    })
+
+    function addCart(){
+        let str = location.search;
+        let arr = str.split("=");
+        let goodsId = arr[1];
+        $.post(
+            "addShoppingCart.php",
+            {
+                "vipName":vipName,
+                "goodsId":goodsId,
+                "goodsCount":"1"
+            },
+            function(data){
+                if(data == "1"){
+                    console.log("添加成功")
+                }else if(data == "0"){
+                    console.log("添加失败")
+                }
+            }
+            )
     }
 })
 
@@ -121,7 +204,7 @@ $(function () {
 })
 
 //banner
-function banner(){
+function banner() {
     let ord = 0;
     let t = true;
     let myTimer;
@@ -149,12 +232,13 @@ function banner(){
         }
 
         t = false;
-        $img.eq(outOrd).animate({ "opacity": 0 }, 1000, function () { t = true });
-        $img.eq(ord).animate({ "opacity": 1 }, 1000, function () { t = true });
+        $img.eq(outOrd).animate({ "opacity": 0 }, 1000, function () { t = true;});
+        $img.eq(ord).animate({ "opacity": 1 }, 1000, function () { t = true ;});
         $li.eq(outOrd).css("background", "#cccccc");
         $li.eq(ord).css("background", "#777777");
         $imgSrc = $img.eq(ord).attr("src");
-        fdj($imgSrc);
+        fdj($imgSrc); 
+        
     }
     function go() {
         goImg(ord + 1);

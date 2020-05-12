@@ -104,3 +104,45 @@ $(function () {
         }, 1000)
     })
 })
+
+//请求商品
+$(function(){
+    for(let i = 1 ;i < 11 ; i++){
+        let id;
+        if(i<10){
+            id = "00"+i;
+        }else{
+            id = "0"+i;
+        }
+        $.get(`getGoodsList.php?typeId=${id}`, function (data) {
+            showAsideGoods(data);
+        }, "json")
+    }
+
+    function showAsideGoods(data) {
+        // console.log(data)
+        let ord = data[0].goodsId.charAt(2) - 1;
+        if(ord < 0){
+            ord = 9;
+        }
+        // console.log(ord)
+        for(let i = 0 ; i < 3 ;i++){
+            let htmlUl = "";
+            let htmlStr = "";
+            for(let i = 0 ; i < 3;i++){
+                data.forEach(item =>{
+                    htmlStr += `
+                    <li>
+                        <h3>
+                            <img src="${item.goodsImg}" alt="">
+                        </h3>
+                        <a href="goods.html?goodsId=${item.goodsId}">${item.goodsName}</a>
+                    </li>
+                    `
+                })
+            }
+            htmlUl = `<ul class='children_list'>${htmlStr}<ul>`;
+            $(".aside_children").eq(ord).append(htmlUl);
+        }
+    }
+})

@@ -40,18 +40,20 @@ $(function () {
 
 
 
-    //购物车功能
+})
+//购物车功能
+function addEvent(data) {
     $(".addBtn").click(function (event) {
-        add($(event.target));
+        add($(event.target),data);
     })
     $(".reduceBtn").click(function (event) {
-        reduce($(event.target));
+        reduce($(event.target),data);
     })
     $(".carNum").change(function (event) {
-        carNum($(event.target));
+        carNum($(event.target),data);
     })
     $(".delBtn").click(function (event) {
-        del($(event.target));
+        del($(event.target),data);
         $(".list_total").find("i").eq(0).html($(".car_body").length)
         choose()
     })
@@ -66,7 +68,7 @@ $(function () {
         totalAll();
     })
     $(".list_total").find("i").eq(0).html($(".car_body").length);
-})
+}
 //购物车增删改查
 function choose() {
     let allCheck = true;
@@ -82,30 +84,59 @@ function choose() {
     $("#allChoose").prop("checked", allCheck);
     $(".list_total").find("i").eq(1).html(chooseNum);
 }
-function add(dom) {
+function changeCount(id,count){
+    let vipName = getCookie("username");
+    $.get("updateGoodsCount.php",
+        {
+            "vipName":vipName,
+            "goodsId":id,
+            "goodsCount":count
+        },
+        function(data){
+            if(data == "1"){
+                console.log("修改成功");
+            }else if(data == "0"){
+                console.log("修改失败");
+            }
+        }
+    )
+}
+function add(dom,data) {
     let $num = dom.prev().val();
     let count = parseInt($num);
     count++;
+    let trNum = dom.parent().parent().index() - 1;
+    console.log(trNum)
+    let id = data[trNum].goodsId;
+    changeCount(id,count);
     dom.prev().val(count);
     totalAll(dom, count);
 }
 
-function reduce(dom) {
+function reduce(dom,data) {
     let $num = dom.next().val();
     let count = parseInt($num);
     count--;
     if (count <= 1) {
         count = 1;
     }
+    let trNum = dom.parent().parent().index() - 1;
+    console.log(trNum)
+    let id = data[trNum].goodsId;
+    changeCount(id,count);
     dom.next().val(count);
     totalAll(dom, count);
 }
-function carNum(dom) {
+function carNum(dom,data) {
     let $num = dom.val();
     let count = parseInt($num);
     if (count <= 1) {
         count = 1;
     }
+    let trNum = dom.parent().parent().index() - 1;
+    console.log(trNum)
+    let id = data[trNum].goodsId;
+    changeCount(id,count);
     dom.val(count);
     totalAll(dom, count)
 }
@@ -124,12 +155,51 @@ function totalAll(dom, count) {
     })
     $(".totalAll").html(allMoney);
 }
-function del(dom) {
-    let $tr = dom.parent();
-    $tr.remove();
+function del(dom,data) {
+    let vipName = getCookie("username");
+    let trNum = dom.parent().index() - 1;
+    let goodsId = data[trNum].goodsId;
+    $.get("deleteGoods.php",{"vipName":vipName,"goodsId":goodsId},function(res){
+        if(res == "1"){
+            location.reload();
+            console.log("删除成功");
+        }else if(res == "0"){
+            console.log("删除失败");
+        }
+    })
     let allMoney = 0;
     $(".total").each(function () {
         allMoney += parseInt($(this).html());
     })
     $(".totalAll").html(allMoney);
 }
+
+$(function () {
+    let vipName = getCookie("username");
+    console.log(vipName)
+    $.get("getShoppingCart.php", "vipName=" + vipName, function (data) {
+        showShoppingCart(data);
+        addEvent(data);
+    }, "json")
+    function showShoppingCart(data) {
+        console.log(data)
+        let htmlCart = "";
+        data.forEach(item => {
+            htmlCart += `
+            <tr class="car_body">
+                <td><input class="oneChoose" type="checkbox"></td>
+                <td><img src="${item.beiyong1}" alt=""><a href="##">${item.goodsName}</a></td>
+                <td width="136px">${item.goodsPrice}元</td>
+                <td width="151px">
+                    <input class="reduceBtn float_left" type="button" value="-">
+                    <input class="carNum float_left" type="text" value="${item.goodsCount}">
+                    <input class="addBtn float_left" type="button" value="+">
+                </td>
+                <td class="total" width="136px">${item.goodsPrice}元</td>
+                <td class="delBtn" width="134px">x</td>
+            </tr>
+            `;
+        })
+        $(".car_tab").append(htmlCart);
+    }
+})

@@ -1,9 +1,21 @@
 $(function () {
-    $.get("getGoodsList.php?typeId=001", function (data) {
-        showData(data);
-    }, "json")
+    for(let i = 1 ;i < 11 ; i++){
+        let id;
+        if(i<10){
+            id = "00"+i;
+        }else{
+            id = "0"+i;
+        }
+        $.get(`getGoodsList.php?typeId=${id}`, function (data) {
+            showData(data);
+        }, "json")
+    }
 
     function showData(data) {
+        let ord = data[0].goodsId.charAt(2) - 1;
+        if(ord < 0){
+            ord = 9;
+        }
         let htmlStr = "";
         for(let i = 0 ; i < 7;i++){
             data.forEach(item =>{
@@ -17,7 +29,7 @@ $(function () {
                 `
             })
         }
-        $(".good_List").eq(0).html(htmlStr);
+        $(".good_List").eq(ord).html(htmlStr);
         checkBorder();
     }
 
