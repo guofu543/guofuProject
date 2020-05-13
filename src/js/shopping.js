@@ -106,7 +106,6 @@ function add(dom,data) {
     let count = parseInt($num);
     count++;
     let trNum = dom.parent().parent().index() - 1;
-    console.log(trNum)
     let id = data[trNum].goodsId;
     changeCount(id,count);
     dom.prev().val(count);
@@ -121,7 +120,6 @@ function reduce(dom,data) {
         count = 1;
     }
     let trNum = dom.parent().parent().index() - 1;
-    console.log(trNum)
     let id = data[trNum].goodsId;
     changeCount(id,count);
     dom.next().val(count);
@@ -134,7 +132,6 @@ function carNum(dom,data) {
         count = 1;
     }
     let trNum = dom.parent().parent().index() - 1;
-    console.log(trNum)
     let id = data[trNum].goodsId;
     changeCount(id,count);
     dom.val(count);
@@ -182,7 +179,6 @@ $(function () {
         addEvent(data);
     }, "json")
     function showShoppingCart(data) {
-        console.log(data)
         let htmlCart = "";
         data.forEach(item => {
             htmlCart += `
@@ -195,7 +191,7 @@ $(function () {
                     <input class="carNum float_left" type="text" value="${item.goodsCount}">
                     <input class="addBtn float_left" type="button" value="+">
                 </td>
-                <td class="total" width="136px">${item.goodsPrice}元</td>
+                <td class="total" width="136px">${item.goodsPrice*item.goodsCount}元</td>
                 <td class="delBtn" width="134px">x</td>
             </tr>
             `;

@@ -62,12 +62,23 @@
                         <a href="#">退出登录</a>
                     </li>
                 </ul>
-                <ul id="my_car" class="float_left">
-                    <li>
-                        <a href="shopping.html"><i class="iconfont icon-gouwuchekong"></i> 购物车（0）</a>
-                        <p>购物车中还没有商品，赶紧选购把！<b></b></p>
-                    </li>
-                </ul>
+                <div id="my_car" class="float_left">
+                    <a href="shopping.html"><i class="iconfont icon-gouwuchekong"></i> 购物车（<em>0</em>）</a>
+                    <div class="myCar_box">
+                        <ul class="car_container">
+                        </ul>
+                        <div class="car_total">
+                            <span>
+                                共<em>1</em>件商品
+                                <br>
+                                <span>
+                                    <em>4299</em>元
+                                </span>
+                            </span>
+                            <a href="shopping.html">去购物车结算</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -936,7 +947,7 @@
             <div class="goods_total">
             </div>
             <div class="inCar">
-                <a id="addCart" href="#">加入购物车</a>
+                <a id="addCart" href="shopping.html">加入购物车</a>
                 <a href="#">喜欢</a>
                 <p>
                     <a href="#">小米自营</a>
@@ -1092,7 +1103,7 @@
         <a href="#">个人中心</a>
         <a href="#">售后服务</a>
         <a href="#">人工客服</a>
-        <a href="shopping.html">购物车</a>
+        <a href="shopping.html">购物车<span id="asideCart"></span></a>
         <a id="goTop" href="#">回顶部</a>
     </div>
 </body>

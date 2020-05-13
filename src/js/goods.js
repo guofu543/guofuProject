@@ -1,8 +1,6 @@
 //获取商品
 $(function () {
-    let str = location.search;
-    let arr = str.split("=");
-    let goodsId = arr[1];
+    let goodsId = location.search.split("=")[1];
     let ord = goodsId.charAt(2);
     if (ord == "1") {
         $.get("getGoodsInfo.php", "goodsId=" + goodsId, function (data) {
@@ -111,15 +109,12 @@ $(function () {
 $(function(){
     let vipName = getCookie("username");
 
-    $("#addCart").click(function(e){
+    $("#addCart").click(function(){
         addCart();
-        e.preventDefault();
     })
 
     function addCart(){
-        let str = location.search;
-        let arr = str.split("=");
-        let goodsId = arr[1];
+        let goodsId = location.search.split("=")[1];
         $.post(
             "addShoppingCart.php",
             {
