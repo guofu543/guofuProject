@@ -12,22 +12,20 @@ $(function () {
     })
 
     //logo商品下滑效果
-    $(".logo_nav li").not("#goods_aside").hover(
+    $(".logo_nav li").not("#goods_aside,.51active").hover(
         function () {
-            // $(".logo_chlidren").eq(1).css("box-shadow","0 2px 2px 2px #85858552")
-            $(this).find($(".logo_chlidren")).css({
+            $("#navBg").css({
                 "height": "229px",
-                // "box-shadow":"0 2px 2px 2px #85858552"
+                "box-shadow": "0 3px 4px rgba(0,0,0,.18)"
             })
+            $(this).find($(".logo_chlidren")).show()
         },
         function () {
-            // setTimeout(() => {
-                // $(".logo_chlidren").eq(1).css("box-shadow","none")
-                $(this).find($(".logo_chlidren")).css({
-                    "height": "0",
-                    // "box-shadow":"none"
-                })
-            // }, 300)
+            $("#navBg").css({
+                "height": "0",
+                "box-shadow": "none"
+            })
+            $(this).find($(".logo_chlidren")).hide()
         }
     )
 
@@ -40,7 +38,7 @@ $(function () {
         location.reload();
     })
 
-    $("#51ative").click(function () {
+    $(".51active").eq(0).click(function () {
         location.href = "SpecialTopic-51.html"
     })
 
@@ -61,31 +59,16 @@ $(function () {
     })
 
     // 请求商品
-    //请求banner-aside数据
-    for (let i = 1; i < 11; i++) {
-        let id;
-        if (i < 10) {
-            id = "00" + i;
-        } else {
-            id = "0" + i;
-        }
-        $.get(`getGoodsList.php?typeId=${id}`, function (data) {
-            showAsideGoods(data);
-        }, "json")
-    }
-
     //请求主页购物车的内容{
     $.get("getShoppingCart.php", "vipName=" + vipName, function (data) {
         showIndexShopping(data)
     }, "json");
 
-    for(let i = 1 ;i < 8 ; i++){
-        let id = "00"+i;
-        $.get(`getGoodsList.php?typeId=${id}`, function (data) {
-            showData(data);
-        }, "json")
-    }
-
+    // 请求logo-nav下滑内容和banner-aside数据
+    $.get(`getGoodsList.php`, function (data) {
+        logoData(data);
+        showAsideGoods(data);
+    }, "json")
 })
 
 //显示用户名
@@ -135,27 +118,31 @@ function removeUserName() {
 
 //显示banner-aside数据
 function showAsideGoods(data) {
-    let ord = data[0].goodsId.charAt(2) - 1;
-    if (ord < 0) {
-        ord = 9;
-    }
-    for (let i = 0; i < 3; i++) {
-        let htmlUl = "";
-        let htmlStr = "";
-        for (let i = 0; i < 3; i++) {
-            data.forEach(item => {
-                htmlStr += `
-                <li>
-                    <h3>
-                        <img src="${item.goodsImg}" alt="">
-                    </h3>
-                    <a href="goods.html?goodsId=${item.goodsId}">${item.goodsName}</a>
-                </li>
-                `
-            })
+    for (let i = 0; i < 10; i++) {
+        for (let o = 0; o < 3; o++) {
+            let htmlStr = "";
+            let ord;
+            for (let j = 0; j < 3; j++) {
+                data.forEach(item => {
+                    ord = item.goodsId.charAt(2) - 1;
+                    if (ord < 0) {
+                        ord = 9;
+                    }
+                    if (ord == i) {
+                        htmlStr += `
+                    <li>
+                        <h3>
+                            <img src="${item.goodsImg}" alt="">
+                        </h3>
+                        <a href="goods.html?goodsId=${item.goodsId}">${item.goodsName}</a>
+                    </li>
+                    `
+                    }
+                })
+            }
+            htmlUl = `<ul class='children_list'>${htmlStr}<ul>`;
+            $(".aside_children").eq(i).append(htmlUl);
         }
-        htmlUl = `<ul class='children_list'>${htmlStr}<ul>`;
-        $(".aside_children").eq(ord).append(htmlUl);
     }
 }
 
@@ -182,33 +169,33 @@ function showIndexShopping(data) {
         $(".car_container").html(htmlCart);
         $(".car_total>span>em").html(totalC)
         $(".car_total>span>span>em").html(totalP);
-        $("#my_car .iconfont").css("color","#fff")
+        $("#my_car .iconfont").css("color", "#fff").attr("class", "iconfont icon-gouwucheman")
         $("#my_car>a").css({
-            "background":"#ff6700",
-            "color":"#fff"
+            "background": "#ff6700",
+            "color": "#fff"
         })
         $("#my_car>a , .car_container , .car_total").hover(
-            function(){
+            function () {
                 $("#my_car>a,#my_car .iconfont").css({
-                    "background":"#fff",
-                    "color":"#ff6700"
+                    "background": "#fff",
+                    "color": "#ff6700"
                 })
                 $(".myCar_box").css({
-                    "height":carHeight+"px"
+                    "height": carHeight + "px"
                 })
                 console.log("sss")
-            },function(){
+            }, function () {
                 $("#my_car>a,#my_car .iconfont").css({
-                    "background":"#ff6700",
-                    "color":"#fff"
+                    "background": "#ff6700",
+                    "color": "#fff"
                 })
                 $(".myCar_box").css({
-                    "height":"0"
+                    "height": "0"
                 })
             }
         )
         $("#my_car>a em").html(totalC)
-        $("#asideCart").css("display","block").html(totalC);
+        $("#asideCart").css("display", "block").html(totalC);
         delIndexShopping(data)
     } else {
         htmlCart = `
@@ -219,6 +206,7 @@ function showIndexShopping(data) {
         $(".car_total").css("display", "none");
         $(".car_container").html(htmlCart);
         $(".car_container li").css("border-bottom", "0")
+        $("#my_car .iconfont").attr("class", "iconfont icon-gouwuchekong")
     }
 }
 
@@ -245,28 +233,32 @@ function delIndexShopping(data) {
     })
 }
 
-function showData(data) {
-    let ord = data[0].goodsId.charAt(2) - 1;
-    console.log(ord)
-    let htmlStr = "";
-    for(let i = 0 ; i < 3;i++){
-        data.forEach(item =>{
-            htmlStr += `
-            <dl class="logo_list">
-                <dt>
-                    <a href="goods.html?goodsId=${item.goodsId}">
-                    <img src="${item.beiyong1}" alt="">
-                    </a>
-                </dt>
-                <dd>
-                    <span>${item.goodsName}</span>
-                    <br>
-                    <em>${item.goodsPrice}起</em>
-                </dd>
-            </dl>
-            `
-        })
+//显示logo-nav下滑内容
+function logoData(data) {
+    for (let i = 0; i < 8; i++) {
+        let htmlStr = "";
+        let ord;
+        for (let j = 0; j < 3; j++) {
+            data.forEach(item => {
+                ord = item.goodsId.charAt(2) - 1;
+                if (ord == i) {
+                    htmlStr += `
+                    <dl class="logo_list">
+                        <dt>
+                            <a href="goods.html?goodsId=${item.goodsId}">
+                            <img src="${item.beiyong1}" alt="">
+                            </a>
+                        </dt>
+                        <dd>
+                            <span>${item.goodsName}</span>
+                            <br>
+                            <em>${item.goodsPrice}起</em>
+                        </dd>
+                    </dl>
+                    `
+                }
+            })
+        }
+        $(".chlid").eq(i).html(htmlStr);
     }
-    $(".chlid").eq(ord).html(htmlStr);
-    // $(".chlid").eq(ord).find("dt").eq(6).css("border-right","none");
 }

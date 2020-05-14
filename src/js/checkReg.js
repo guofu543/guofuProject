@@ -107,10 +107,17 @@ function checkReg() {
         },
         function (data) {
             if (data == "success") {
-                $("#regBtn").prev().html("注册成功,3秒后跳转登录页面");
-                setTimeout(() => {
-                    location.href = "login.html";
-                }, 3000);
+                let myTimer;
+                let regCount = 4;
+                myTimer = setInterval(()=>{
+                    regCount--;
+                    if(regCount < 1){
+                        clearInterval(myTimer);
+                        location.href = "login.html";
+                        return;
+                    }
+                    $("#regBtn").prev().html(`注册成功, ${regCount} 秒后跳转登录页面`);
+                },1000)
             } else if (data == "fail") {
                 $("#regBtn").prev().html("注册失败");
                 $("#regBtn").prev().css("color", "#ff6700");

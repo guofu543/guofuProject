@@ -1,145 +1,28 @@
-//获取商品
 $(function () {
+    //获取商品
     let goodsId = location.search.split("=")[1];
     let ord = goodsId.charAt(2);
-    if (ord == "1") {
-        $.get("getGoodsInfo.php", "goodsId=" + goodsId, function (data) {
+    $.get("getGoodsInfo.php", "goodsId=" + goodsId, function (data) {
+        if(ord == "1"){
             showPhone(data);
-        }, "json");
-        function showPhone(data) {
-            console.log(data);
-            $(".goodsName-wrap h2").html(data.goodsName);
-            $(".goodsName-wrap > a").html(data.goodsName + "变焦版");
-            let htmlImg = `
-                <img src="${data.beiyong1}" alt="">
-                <img src="${data.beiyong2}" alt="">
-                <img src="${data.beiyong3}" alt="">
-                <img src="${data.beiyong4}" alt="">
-                <img src="${data.beiyong5}" alt="">
-            `;
-            $(".goods_banner").prepend(htmlImg);
-            banner();
-
-            let htmlTitle = `
-                <h3>${data.goodsName}</h3>
-                <p>
-                    <span>${data.beiyong6}</span>
-                    <em>${data.beiyong7}</em>
-                </p>
-                <p>小米自营</p>
-                <p>${data.goodsPrice}元</p>
-                <p>
-                    <span>赠完即止</span>
-                    <em>赠Redmi AirDots 真无线蓝牙耳机 黑色</em>
-                </p>
-            `;
-            $(".goods_title").append(htmlTitle);
-
-            let totalp = parseInt(data.goodsPrice);
-            let totalAll = parseInt(totalp + 79);
-            let htmlTotal = `
-                <ul>
-                    <li class="clear_fix">
-                        <span class="float_left">${data.goodsName} 8GB+128GB 太空灰</span>
-                        <em class="float_right">${data.goodsPrice} 元</em>
-                    </li>
-                    <li class="clear_fix">
-                        <span class="float_left">碎屏保障服务</span>
-                        <em class="float_right">79 元<del>159元</del></em>
-                    </li>
-                    <li>总计：${totalAll}元</li>
-                </ul>
-            `;
-            $(".goods_total").append(htmlTotal);
-        }
-    } else {
-        $.get("getGoodsInfo.php", "goodsId=" + goodsId, function (data) {
+        }else{
             showData(data);
-        }, "json")
-        function showData(data) {
-            console.log(data);
-            $(".goodsName-wrap h2").html(data.goodsName);
-            $(".goodsName-wrap > a").html("");
-            let htmlImg = `
-            <img src="${data.beiyong1}" alt="">
-                <div id="mirrorBox">
-
-                </div>
-                <div id="showBox">
-
-                </div>
-        `;
-            $(".goods_banner").html(htmlImg);
-            fdj(data.beiyong1)
-
-            let htmlTitle = `
-            <h3>${data.goodsName}</h3>
-            <p>
-                <em>${data.goodsDesc}</em>
-            </p>
-            <p>小米自营</p>
-            <p>${data.goodsPrice}元</p>
-            <p>
-                <span>赠完即止</span>
-                <em>赠Redmi AirDots 真无线蓝牙耳机 黑色</em>
-            </p>
-        `;
-            $(".goods_title").append(htmlTitle);
-
-            let htmlTotal = `
-            <ul>
-                <li class="clear_fix">
-                    <span class="float_left">${data.goodsName} 8GB+128GB 太空灰</span>
-                    <em class="float_right">${data.goodsPrice} 元</em>
-                </li>
-                <li class="clear_fix">
-                </li>
-                <li>总计：${data.goodsPrice}元</li>
-            </ul>
-        `;
-            $(".goods_total").append(htmlTotal);
-            $(".goods_edition").eq(0).html("")
-            $(".goods_edition").eq(1).css("margin-bottom","0")
-            $(".goods_service").html("")
         }
-    }
+    }, "json");
 
-})
-
-$(function(){
-    let vipName = getCookie("username");
-
-    $("#addCart").click(function(){
+    //添加购物车
+    $("#addCart").click(function () {
         addCart();
     })
 
-    function addCart(){
-        let goodsId = location.search.split("=")[1];
-        $.post(
-            "addShoppingCart.php",
-            {
-                "vipName":vipName,
-                "goodsId":goodsId,
-                "goodsCount":"1"
-            },
-            function(data){
-                if(data == "1"){
-                    console.log("添加成功")
-                }else if(data == "0"){
-                    console.log("添加失败")
-                }
-            }
-            )
-    }
-})
-
-$(function () {
-    //nav 203px
+    // 商品name粘贴
     $(window).scroll(function () {
         if ($("body,html").scrollTop() > 140) {
             $("#goodsName").css({
                 "position": "fixed",
-                "top": "0"
+                "top": "0",
+                "background":"#fff",
+                "margin":"0 auto"
             })
         } else {
             $("#goodsName").css({
@@ -147,56 +30,171 @@ $(function () {
             })
         }
     })
-})
 
-//edition
-$(function () {
+    // edition
     let $ediLi1 = $(".goods_edition").eq(0).find("li");
     let $ediLi2 = $(".goods_edition").eq(1).find("li");
     let $serviceLi1 = $(".goods_service").eq(0).find("li");
     let $serviceLi2 = $(".goods_service").eq(1).find("li");
     let $serviceLi3 = $(".goods_service").eq(2).find("li");
-
-    function editionChoose($dom) {
-        $dom.click(function () {
-            $dom.css({
-                "color": "#000",
-                "border-color": "#e0e0e0"
-            })
-            $(this).css({
-                "color": "#ff6700",
-                "border-color": "#ff6700"
-            })
-        })
-    }
-
-    function serviceChoose($dom) {
-        $dom.click(function () {
-            $dom.css("border-color", "#e0e0e0");
-            $dom.find("em img").css("display", "none")
-            $dom.find("em").css({
-                "border-color": "#bbbbbb",
-                "background": "#fff"
-            });
-            $dom.find("div").find("span").css("color", "#000")
-            $(this).css("border-color", "#ff6700");
-            $(this).find("em img").css("display", "block");
-            $(this).find("em").css({
-                "border-color": "#ff6700",
-                "background": "#ff6700"
-            });
-            $(this).find("div").find("span").css("color", "#ff6700")
-        })
-    }
-
     editionChoose($ediLi1);
     editionChoose($ediLi2);
-
     serviceChoose($serviceLi1)
     serviceChoose($serviceLi2)
     serviceChoose($serviceLi3)
 
 })
+
+//显示手机的详细页面
+function showPhone(data) {
+    console.log(data);
+    $(".goodsName-wrap h2").html(data.goodsName);
+    $(".goodsName-wrap > a").html(data.goodsName + "变焦版");
+    let htmlImg = `
+        <img src="${data.beiyong1}" alt="">
+        <img src="${data.beiyong2}" alt="">
+        <img src="${data.beiyong3}" alt="">
+        <img src="${data.beiyong4}" alt="">
+        <img src="${data.beiyong5}" alt="">
+    `;
+    $(".goods_banner").prepend(htmlImg);
+    banner();
+
+    let htmlTitle = `
+        <h3>${data.goodsName}</h3>
+        <p>
+            <span>${data.beiyong6}</span>
+            <em>${data.beiyong7}</em>
+        </p>
+        <p>小米自营</p>
+        <p>${data.goodsPrice}元</p>
+        <p>
+            <span>赠完即止</span>
+            <em>赠Redmi AirDots 真无线蓝牙耳机 黑色</em>
+        </p>
+    `;
+    $(".goods_title").append(htmlTitle);
+
+    let totalp = parseInt(data.goodsPrice);
+    let totalAll = parseInt(totalp + 79);
+    let htmlTotal = `
+        <ul>
+            <li class="clear_fix">
+                <span class="float_left">${data.goodsName} 8GB+128GB 太空灰</span>
+                <em class="float_right">${data.goodsPrice} 元</em>
+            </li>
+            <li class="clear_fix">
+                <span class="float_left">碎屏保障服务</span>
+                <em class="float_right">79 元<del>159元</del></em>
+            </li>
+            <li>总计：${totalAll}元</li>
+        </ul>
+    `;
+    $(".goods_total").append(htmlTotal);
+}
+
+//显示非手机的详细页面
+function showData(data) {
+    console.log(data);
+    $(".goodsName-wrap h2").html(data.goodsName);
+    $(".goodsName-wrap > a").html("");
+    let htmlImg = `
+    <img src="${data.beiyong1}" alt="">
+        <div id="mirrorBox">
+
+        </div>
+        <div id="showBox">
+
+        </div>
+`;
+    $(".goods_banner").html(htmlImg);
+    fdj(data.beiyong1)
+
+    let htmlTitle = `
+    <h3>${data.goodsName}</h3>
+    <p>
+        <em>${data.goodsDesc}</em>
+    </p>
+    <p>小米自营</p>
+    <p>${data.goodsPrice}元</p>
+    <p>
+        <span>赠完即止</span>
+        <em>赠Redmi AirDots 真无线蓝牙耳机 黑色</em>
+    </p>
+`;
+    $(".goods_title").append(htmlTitle);
+
+    let htmlTotal = `
+    <ul>
+        <li class="clear_fix">
+            <span class="float_left">${data.goodsName} 8GB+128GB 太空灰</span>
+            <em class="float_right">${data.goodsPrice} 元</em>
+        </li>
+        <li class="clear_fix">
+        </li>
+        <li>总计：${data.goodsPrice}元</li>
+    </ul>
+`;
+    $(".goods_total").append(htmlTotal);
+    $(".goods_edition").eq(0).html("")
+    $(".goods_edition").eq(1).css("margin-bottom", "0")
+    $(".goods_service").html("")
+}
+
+//加入购物车
+function addCart() {
+    let vipName = getCookie("username");
+    let goodsId = location.search.split("=")[1];
+    $.post(
+        "addShoppingCart.php",
+        {
+            "vipName": vipName,
+            "goodsId": goodsId,
+            "goodsCount": "1"
+        },
+        function (data) {
+            if (data == "1") {
+                console.log("添加成功")
+            } else if (data == "0") {
+                alert("添加失败")
+            }
+        }
+    )
+}
+
+//edition
+function editionChoose($dom) {
+    $dom.click(function () {
+        $dom.css({
+            "color": "#000",
+            "border-color": "#e0e0e0"
+        })
+        $(this).css({
+            "color": "#ff6700",
+            "border-color": "#ff6700"
+        })
+    })
+}
+
+//server
+function serviceChoose($dom) {
+    $dom.click(function () {
+        $dom.css("border-color", "#e0e0e0");
+        $dom.find("em img").css("display", "none")
+        $dom.find("em").css({
+            "border-color": "#bbbbbb",
+            "background": "#fff"
+        });
+        $dom.find("div").find("span").css("color", "#000")
+        $(this).css("border-color", "#ff6700");
+        $(this).find("em img").css("display", "block");
+        $(this).find("em").css({
+            "border-color": "#ff6700",
+            "background": "#ff6700"
+        });
+        $(this).find("div").find("span").css("color", "#ff6700")
+    })
+}
 
 //banner
 function banner() {
@@ -227,13 +225,13 @@ function banner() {
         }
 
         t = false;
-        $img.eq(outOrd).animate({ "opacity": 0 }, 1000, function () { t = true;});
-        $img.eq(ord).animate({ "opacity": 1 }, 1000, function () { t = true ;});
+        $img.eq(outOrd).animate({ "opacity": 0 }, 1000, function () { t = true; });
+        $img.eq(ord).animate({ "opacity": 1 }, 1000, function () { t = true; });
         $li.eq(outOrd).css("background", "#cccccc");
         $li.eq(ord).css("background", "#777777");
         $imgSrc = $img.eq(ord).attr("src");
-        fdj($imgSrc); 
-        
+        fdj($imgSrc);
+
     }
     function go() {
         goImg(ord + 1);
@@ -278,7 +276,7 @@ function fdj(imgSrc) {
     $(".goods_banner").mousemove(function (event) {
         let left1 = event.pageX - bannerBoxLeft - mirrorWidth / 2;
         let top1 = event.pageY - bannerBoxTop - mirrorHeight / 2;
-
+        console.log(event.pageX,event.pageY)
         //考虑到轮播按钮，width=34px
         if (left1 < 34) {
             left1 = 34;
@@ -315,7 +313,5 @@ function fdj(imgSrc) {
     })
 
 }
-
-
 
 

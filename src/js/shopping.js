@@ -161,7 +161,7 @@ function del(dom,data) {
             location.reload();
             console.log("删除成功");
         }else if(res == "0"){
-            console.log("删除失败");
+            alert("删除失败");
         }
     })
     let allMoney = 0;
