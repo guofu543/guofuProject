@@ -58,14 +58,20 @@ $(function () {
         }, 1000)
     })
 
+    //商品列表跳转
+    $(".banner_aside").find("li").click(function(){
+        let goodsIndex = $(this).index();
+        location.href = `goodsList.html?goodsType=${goodsIndex}`;
+    })
+
     // 请求商品
     //请求主页购物车的内容{
-    $.get("getShoppingCart.php", "vipName=" + vipName, function (data) {
+    $.get("php/getShoppingCart.php", "vipName=" + vipName, function (data) {
         showIndexShopping(data)
     }, "json");
 
     // 请求logo-nav下滑内容和banner-aside数据
-    $.get(`getGoodsList.php`, function (data) {
+    $.get(`php/getGoodsList.php`, function (data) {
         logoData(data);
         showAsideGoods(data);
     }, "json")
@@ -218,7 +224,7 @@ function delIndexShopping(data) {
             if ($(event.target).attr("myid") == item.goodsId) {
                 // $(event.target).parent().remove();
                 location.reload();
-                $.get("deleteGoods.php", {
+                $.get("php/deleteGoods.php", {
                     "vipName": vipName,
                     "goodsId": item.goodsId
                 }, function (d) {
@@ -235,7 +241,7 @@ function delIndexShopping(data) {
 
 //显示logo-nav下滑内容
 function logoData(data) {
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 7; i++) {
         let htmlStr = "";
         let ord;
         for (let j = 0; j < 3; j++) {
@@ -260,5 +266,8 @@ function logoData(data) {
             })
         }
         $(".chlid").eq(i).html(htmlStr);
+        let dlLenth = $(".chlid").eq(i).find("dl").length - 1;
+        console.log(dlLenth)
+        $(".chlid").eq(i).find("dl").eq(dlLenth).find("dt a").css("border","0")
     }
 }

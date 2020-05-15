@@ -92,6 +92,10 @@
 }
 
 /* ========================================= */
+#goodsName-fix{
+    // width: 100%;
+    height: 63px;
+}
 #goodsName {
     border-top: 1px solid #e0e0e0;
     border-bottom: 1px solid #e0e0e0;
@@ -103,13 +107,13 @@
 }
 .goodsName-wrap {
     height: 63px;
-    > h2 {
+    div span {
         font-size: 18px;
-        line-height: 63px;
+        line-height: 59px;
     }
-    > a {
+    div a {
         font-size: 12px;
-        line-height: 63px;
+        line-height: 59px;
         color: #616161;
         border-left: 1px solid #c5c5c5;
         padding-left: 10px;
@@ -120,7 +124,7 @@
     }
     p a {
         font-size: 14px;
-        line-height: 63px;
+        line-height: 59px;
         color: #616161;
         border-left: 1px solid #c5c5c5;
         padding: 0 5px 0 8px;

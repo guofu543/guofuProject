@@ -86,7 +86,7 @@ function choose() {
 }
 function changeCount(id,count){
     let vipName = getCookie("username");
-    $.get("updateGoodsCount.php",
+    $.get("php/updateGoodsCount.php",
         {
             "vipName":vipName,
             "goodsId":id,
@@ -156,7 +156,7 @@ function del(dom,data) {
     let vipName = getCookie("username");
     let trNum = dom.parent().index() - 1;
     let goodsId = data[trNum].goodsId;
-    $.get("deleteGoods.php",{"vipName":vipName,"goodsId":goodsId},function(res){
+    $.get("php/deleteGoods.php",{"vipName":vipName,"goodsId":goodsId},function(res){
         if(res == "1"){
             location.reload();
             console.log("删除成功");
@@ -174,7 +174,7 @@ function del(dom,data) {
 $(function () {
     let vipName = getCookie("username");
     console.log(vipName)
-    $.get("getShoppingCart.php", "vipName=" + vipName, function (data) {
+    $.get("php/getShoppingCart.php", "vipName=" + vipName, function (data) {
         showShoppingCart(data);
         addEvent(data);
     }, "json")

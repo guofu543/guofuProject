@@ -15,7 +15,7 @@ $(function () {
 
 function checkLogin() {
     $.post(
-        "login.php",
+        "php/login.php",
         {
             "username": $("#username").val(),
             "userpass": $("#userpass").val()
@@ -25,7 +25,7 @@ function checkLogin() {
                 addCookie("username", $("#username").val(), 7);
                 setTimeout(() => {
                     location.href = "index.html";
-                }, 2000);
+                }, 1500);
             } else if (data == "fail") {
                 $("#btnLogin").prev().html("！用户名或密码不正确");
                 $("#btnLogin").prev().css("color","#ff6700");

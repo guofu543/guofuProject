@@ -205,15 +205,15 @@ $(function () {
 
 //获取商品
 $(function () {
-    $.get("getGoodsList.php?typeId=001", function (data) {
+    $.get("php/getGoodsList.php?typeId=001", function (data) {
         showData(data);
     }, "json");
 
-    $.get("getGoodsList.php?typeId=002",function(data){
+    $.get("php/getGoodsList.php?typeId=002",function(data){
         showData(data);
     },"json")
 
-    $.get("getGoodsList.php?typeId=004",function(data){
+    $.get("php/getGoodsList.php?typeId=004",function(data){
         showData(data);
     },"json")
 

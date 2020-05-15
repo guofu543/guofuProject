@@ -2,7 +2,7 @@ $(function () {
     //获取商品
     let goodsId = location.search.split("=")[1];
     let ord = goodsId.charAt(2);
-    $.get("getGoodsInfo.php", "goodsId=" + goodsId, function (data) {
+    $.get("php/getGoodsInfo.php", "goodsId=" + goodsId, function (data) {
         if(ord == "1"){
             showPhone(data);
         }else{
@@ -15,7 +15,7 @@ $(function () {
         addCart();
     })
 
-    // 商品name粘贴
+    // 商品name贴顶
     $(window).scroll(function () {
         if ($("body,html").scrollTop() > 140) {
             $("#goodsName").css({
@@ -47,7 +47,7 @@ $(function () {
 
 //显示手机的详细页面
 function showPhone(data) {
-    console.log(data);
+    // console.log(data);
     $(".goodsName-wrap h2").html(data.goodsName);
     $(".goodsName-wrap > a").html(data.goodsName + "变焦版");
     let htmlImg = `
@@ -95,7 +95,7 @@ function showPhone(data) {
 
 //显示非手机的详细页面
 function showData(data) {
-    console.log(data);
+    // console.log(data);
     $(".goodsName-wrap h2").html(data.goodsName);
     $(".goodsName-wrap > a").html("");
     let htmlImg = `
@@ -146,7 +146,7 @@ function addCart() {
     let vipName = getCookie("username");
     let goodsId = location.search.split("=")[1];
     $.post(
-        "addShoppingCart.php",
+        "php/addShoppingCart.php",
         {
             "vipName": vipName,
             "goodsId": goodsId,
@@ -276,7 +276,7 @@ function fdj(imgSrc) {
     $(".goods_banner").mousemove(function (event) {
         let left1 = event.pageX - bannerBoxLeft - mirrorWidth / 2;
         let top1 = event.pageY - bannerBoxTop - mirrorHeight / 2;
-        console.log(event.pageX,event.pageY)
+        // console.log(event.pageX,event.pageY)
         //考虑到轮播按钮，width=34px
         if (left1 < 34) {
             left1 = 34;

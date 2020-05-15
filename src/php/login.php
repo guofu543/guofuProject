@@ -14,7 +14,7 @@
 
     if(count($arr) == 1){
         echo "success";
-    }else{
+    }else{ 
         echo "fail";
     }
 ?>

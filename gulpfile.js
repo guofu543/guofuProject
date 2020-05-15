@@ -36,9 +36,9 @@ gulp.task("watch-all",async ()=>{
         .pipe(gulp.dest("d:\\phpstudy_pro\\WWW\\myProject"))
     })
 
-    gulp.watch("./src/*.php",async()=>{
-        gulp.src("./src/*.php")
-        .pipe(gulp.dest("d:\\phpstudy_pro\\WWW\\myProject"))
+    gulp.watch("./src/php/*.php",async()=>{
+        gulp.src("./src/php/*.php")
+        .pipe(gulp.dest("d:\\phpstudy_pro\\WWW\\myProject/php"))
     })
 
     gulp.watch("./src/js/**/*",async()=>{

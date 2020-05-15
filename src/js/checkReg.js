@@ -85,7 +85,7 @@ function isPass2() {
 }
 
 function hasUser() {
-    $.get("checkUser.php", {"username":$("#username").val()}, function (data) {
+    $.get("php/checkUser.php", {"username":$("#username").val()}, function (data) {
         if (data == "0") {
             $("#regBtn").prev().html("用户名可用");
             arr[3] = 1;
@@ -100,7 +100,7 @@ function hasUser() {
 
 function checkReg() {
     $.post(
-        "addUser.php",
+        "php/addUser.php",
         {
             "username":$("#username").val(),
             "userpass":$("#userpass").val()
