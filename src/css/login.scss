@@ -91,7 +91,7 @@
     }
     input[type="password"] {
         width: calc(100% - 16px);
-        margin: 14px 0 24px;
+        margin-top: 14px;
     }
     input[type="button"] {
         background: #ff6700;
@@ -103,6 +103,22 @@
         cursor: pointer;
     }
 }
+#yzmBox{
+    margin: 14px 0 14px;
+    img{
+        width: 100px;
+        height: 40px;
+        float: left;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+    #yzm{
+        width: 100px;
+        height: 40px;
+        float: left;
+    }
+}
+
 .login_foot{
     span{
         font-size: 12px;
